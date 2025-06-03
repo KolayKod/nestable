@@ -1,107 +1,183 @@
-Nestable
-========
+# Vanilla Nestable
 
-## PLEASE NOTE
+Vanilla JavaScript ile yazılmış, jQuery bağımlılığı olmayan, sürükle-bırak özellikli iç içe liste (nested list) kütüphanesi.
 
-**I cannot provide any support or guidance beyond this README. If this code helps you that's great but I have no plans to develop Nestable beyond this demo (it's not a final product and has limited functionality). I cannot reply to any requests for help.**
+## Özellikler
 
-* * *
+- ✅ jQuery bağımlılığı yok
+- ✅ Modern JavaScript (ES6+)
+- ✅ Sürükle-bırak desteği
+- ✅ Touch olayları desteği
+- ✅ Responsive tasarım
+- ✅ Özelleştirilebilir görünüm
+- ✅ Kolay entegrasyon
+- ✅ Hafif ve performanslı
 
-### Drag & drop hierarchical list with mouse and touch compatibility (jQuery / Zepto plugin)
+## Kurulum
 
-[**Try Nestable Demo**](http://dbushell.github.com/Nestable/)
+### NPM ile Kurulum
 
-Nestable is an experimental example and not under active development. If it suits your requirements feel free to expand upon it!
+```bash
+npm install vanilla-nestable
+```
 
-## Usage
+### CDN ile Kurulum
 
-Write your nested HTML lists like so:
+```html
+<script src="https://unpkg.com/vanilla-nestable/dist/vanilla-nestable.min.js"></script>
+```
 
-    <div class="dd">
-        <ol class="dd-list">
-            <li class="dd-item" data-id="1">
-                <div class="dd-handle">Item 1</div>
-            </li>
-            <li class="dd-item" data-id="2">
-                <div class="dd-handle">Item 2</div>
-            </li>
-            <li class="dd-item" data-id="3">
-                <div class="dd-handle">Item 3</div>
-                <ol class="dd-list">
-                    <li class="dd-item" data-id="4">
-                        <div class="dd-handle">Item 4</div>
-                    </li>
-                    <li class="dd-item" data-id="5">
-                        <div class="dd-handle">Item 5</div>
-                    </li>
-                </ol>
-            </li>
-        </ol>
-    </div>
+### Manuel Kurulum
 
-Then activate with jQuery like so:
+1. `vanilla-nestable.js` dosyasını projenize ekleyin
+2. HTML dosyanızda script etiketini ekleyin:
 
-    $('.dd').nestable({ /* config options */ });
+```html
+<script src="path/to/vanilla-nestable.js"></script>
+```
 
-### Events
+## Kullanım
 
-The `change` event is fired when items are reordered.
+### Temel Kullanım
 
-    $('.dd').on('change', function() {
-        /* on change event */
-    });
+```html
+<div class="dd" id="nestable">
+    <ol class="dd-list">
+        <li class="dd-item" data-id="1">
+            <div class="dd-handle">Item 1</div>
+        </li>
+        <li class="dd-item" data-id="2">
+            <div class="dd-handle">Item 2</div>
+            <ol class="dd-list">
+                <li class="dd-item" data-id="3">
+                    <div class="dd-handle">Item 3</div>
+                </li>
+            </ol>
+        </li>
+    </ol>
+</div>
 
-### Methods
+<script>
+    // Nestable'ı başlat
+    const nestableElement = document.querySelector('#nestable');
+    window.nestable(nestableElement);
+</script>
+```
 
-You can get a serialised object with all `data-*` attributes for each item.
+### Grup Kullanımı
 
-    $('.dd').nestable('serialize');
+```html
+<div class="dd" id="nestable1" data-nestable-group="1">
+    <!-- Liste içeriği -->
+</div>
 
-The serialised JSON for the example above would be:
+<div class="dd" id="nestable2" data-nestable-group="1">
+    <!-- Liste içeriği -->
+</div>
 
-    [{"id":1},{"id":2},{"id":3,"children":[{"id":4},{"id":5}]}]
+<script>
+    // Aynı gruptaki listeler arasında sürükle-bırak yapılabilir
+    window.nestable(document.querySelectorAll('.dd'));
+</script>
+```
 
-### Configuration
+### Metodlar
 
-You can change the follow options:
+```javascript
+const nestableElement = document.querySelector('#nestable');
+const nestableInstance = window.nestable(nestableElement);
 
-* `maxDepth` number of levels an item can be nested (default `5`)
-* `group` group ID to allow dragging between lists (default `0`)
+// Tüm öğeleri genişlet
+nestableInstance.expandAll();
 
-These advanced config options are also available:
+// Tüm öğeleri daralt
+nestableInstance.collapseAll();
 
-* `listNodeName` The HTML element to create for lists (default `'ol'`)
-* `itemNodeName` The HTML element to create for list items (default `'li'`)
-* `rootClass` The class of the root element `.nestable()` was used on (default `'dd'`)
-* `listClass` The class of all list elements (default `'dd-list'`)
-* `itemClass` The class of all list item elements (default `'dd-item'`)
-* `dragClass` The class applied to the list element that is being dragged (default `'dd-dragel'`)
-* `handleClass` The class of the content element inside each list item (default `'dd-handle'`)
-* `collapsedClass` The class applied to lists that have been collapsed (default `'dd-collapsed'`)
-* `placeClass` The class of the placeholder element (default `'dd-placeholder'`)
-* `emptyClass` The class used for empty list placeholder elements (default `'dd-empty'`)
-* `expandBtnHTML` The HTML text used to generate a list item expand button (default `'<button data-action="expand">Expand></button>'`)
-* `collapseBtnHTML` The HTML text used to generate a list item collapse button (default `'<button data-action="collapse">Collapse</button>'`)
+// Liste yapısını serialize et
+const serialized = nestableInstance.serialize();
+```
 
-**Inspect the [Nestable Demo](http://dbushell.github.com/Nestable/) for guidance.**
+### Olaylar
 
-## Change Log
+```javascript
+const nestableElement = document.querySelector('#nestable');
+window.nestable(nestableElement);
 
-### 15th October 2012
+// Değişiklik olayını dinle
+nestableElement.addEventListener('change', function(e) {
+    const serialized = window.nestable(nestableElement, 'serialize');
+    console.log('Yeni liste yapısı:', serialized);
+});
+```
 
-* Merge for Zepto.js support
-* Merge fix for remove/detach items
+## Özelleştirme
 
-### 27th June 2012
+### CSS Sınıfları
 
-* Added `maxDepth` option (default to 5)
-* Added empty placeholder
-* Updated CSS class structure with options for `listClass` and `itemClass`.
-* Fixed to allow drag and drop between multiple Nestable instances (off by default).
-* Added `group` option to enabled the above.
+```css
+.dd { }                    /* Ana konteyner */
+.dd-list { }              /* Liste */
+.dd-item { }              /* Liste öğesi */
+.dd-handle { }            /* Sürükleme tutamacı */
+.dd-placeholder { }       /* Sürükleme sırasındaki yer tutucu */
+.dd-dragel { }            /* Sürüklenen öğe */
+.dd-collapsed { }         /* Daraltılmış öğe */
+.dd-empty { }             /* Boş liste */
+.dd-nochildren { }        /* Alt öğesi olmayan öğe */
+```
 
-* * *
+### Seçenekler
 
-Author: David Bushell [http://dbushell.com](http://dbushell.com/) [@dbushell](http://twitter.com/dbushell/)
+```javascript
+const options = {
+    listNodeName: 'ol',           // Liste elementi
+    itemNodeName: 'li',           // Öğe elementi
+    rootClass: 'dd',              // Kök sınıf
+    listClass: 'dd-list',         // Liste sınıfı
+    itemClass: 'dd-item',         // Öğe sınıfı
+    dragClass: 'dd-dragel',       // Sürükleme sınıfı
+    handleClass: 'dd-handle',     // Tutamak sınıfı
+    collapsedClass: 'dd-collapsed', // Daraltılmış sınıf
+    placeClass: 'dd-placeholder',  // Yer tutucu sınıf
+    noDragClass: 'dd-nodrag',      // Sürüklenemez sınıf
+    emptyClass: 'dd-empty',        // Boş liste sınıfı
+    expandBtnHTML: '<button data-action="expand">Genişlet</button>',
+    collapseBtnHTML: '<button data-action="collapse">Daralt</button>',
+    group: 0,                      // Grup ID
+    maxDepth: 5,                   // Maksimum derinlik
+    threshold: 20                  // Sürükleme eşiği
+};
 
-Copyright © 2012 David Bushell | BSD & MIT license
+window.nestable(element, options);
+```
+
+## Tarayıcı Desteği
+
+- Chrome (son 2 versiyon)
+- Firefox (son 2 versiyon)
+- Safari (son 2 versiyon)
+- Edge (son 2 versiyon)
+- iOS Safari (son 2 versiyon)
+- Android Chrome (son 2 versiyon)
+
+## Katkıda Bulunma
+
+1. Bu depoyu fork edin
+2. Yeni bir branch oluşturun (`git checkout -b feature/yeniOzellik`)
+3. Değişikliklerinizi commit edin (`git commit -am 'Yeni özellik: Açıklama'`)
+4. Branch'inizi push edin (`git push origin feature/yeniOzellik`)
+5. Pull Request oluşturun
+
+## Lisans
+
+MIT License - Detaylar için [LICENSE](LICENSE) dosyasına bakın.
+
+## İletişim
+
+- GitHub: [GitHub Profiliniz]
+- E-posta: [E-posta Adresiniz]
+
+## Teşekkürler
+
+- Orijinal jQuery Nestable projesine teşekkürler
+- Tüm katkıda bulunanlara teşekkürler
