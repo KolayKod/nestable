@@ -60,7 +60,10 @@ npm install vanilla-nestable
 <script>
     // Nestable'ı başlat
     const nestableElement = document.querySelector('#nestable');
-    window.nestable(nestableElement);
+    window.nestable(nestableElement, {
+        group: 1,
+        maxDepth: 5
+    });
 </script>
 ```
 
@@ -76,8 +79,12 @@ npm install vanilla-nestable
 </div>
 
 <script>
-    // Aynı gruptaki listeler arasında sürükle-bırak yapılabilir
-    window.nestable(document.querySelectorAll('.dd'));
+    // Her bir liste için ayrı ayrı başlat
+    window.nestable(document.querySelector('#nestable1'), { group: 1 });
+    window.nestable(document.querySelector('#nestable2'), { group: 1 });
+    
+    // Veya tüm listeleri tek seferde başlat
+    window.nestable(document.querySelectorAll('.dd'), { group: 1 });
 </script>
 ```
 
