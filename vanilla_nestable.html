@@ -5,7 +5,7 @@
     <title>Nestable</title>
     <style>
    .cf:after { visibility: hidden; display: block; font-size: 0; content: " "; clear: both; height: 0; }
-* html .cf { zoom: 1; }
+    * html .cf { zoom: 1; }
 *:first-child+html .cf { zoom: 1; }
 
 html { margin: 0; padding: 0; }
@@ -131,11 +131,7 @@ p { line-height: 1.5em; }
 .dd3-handle:before { content: '≡'; display: block; position: absolute; left: 0; top: 3px; width: 100%; text-align: center; text-indent: 0; color: #fff; font-size: 20px; font-weight: normal; }
 .dd3-handle:hover { background: #ddd; }
 
-/**
- * Socialite
- */
 
-.socialite { display: block; float: left; height: 35px; }
         </style>
 </head>
 <body>
@@ -188,23 +184,19 @@ p { line-height: 1.5em; }
 
     <div id="nestable-output" style="margin-top: 200px;padding: 10px;background: #f5f5f5;white-space: pre-wrap;height: auto;"></div>
    
-   
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/pasif.jquery.min.js"></script>
-<script src="jquery_to_vanilla_nestable.js"></script>
+
+<script src="vanilla_nestable.js"></script>
 
 <script>
     
 document.addEventListener('DOMContentLoaded', function() {
      var nestableElement = document.getElementById('nestable');
      var nestableElement2 = document.getElementById('nestable2');
-    //const nestable = document.getElementById('nestable');
     const nestableOutput = document.getElementById('nestable-output');
 
 
     document.querySelector('.dd').addEventListener('change', function() {
-        var serialize_data =   nestable([nestableElement], 'serialize'); //$('.dd').nestable('serialize');
-        console.log("serialize çıktı:",serialize_data);
-    
+        var serialize_data =   nestable(nestableElement, 'serialize'); 
     document.getElementById('nestable-output').textContent = JSON.stringify(serialize_data, null, 2);
 
     });
@@ -220,23 +212,29 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         
-    // $('#nestable').nestable('collapseItem', $('.dd3-item').first());
+   
    //expandAll
+   /*
+    // 1. Yöntem
+    const nestableElement = document.querySelector('#nestable');
+    const firstItem = document.querySelector('.dd3-item');
+    window.nestable(nestableElement, 'collapseItem', firstItem);
 
+    // 2. Yöntem
+    const nestableInstance = window.nestable(nestableElement);
+    nestableInstance.collapseItem(firstItem);
+   
+   */
 
 
 document.getElementById('nestable-menu').addEventListener('click', function(e) {
     var target = e.target;
     var action = target.getAttribute('data-action');
-
     if (action === 'expand-all') {
-      //  $('.dd').nestable('expandAll');
         nestable([nestableElement], 'expandAll'); 
     }
 
     if (action === 'collapse-all') {
-        // Aynı şekilde buraya da collapseAll işlemini tanımlamalısın
-       // $('.dd').nestable('collapseAll');
          nestable([nestableElement], 'collapseAll'); 
     }
 });
